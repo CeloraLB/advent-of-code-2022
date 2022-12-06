@@ -2,7 +2,7 @@ class Decoder:
     def __init__ (self):
         pass
     
-    def getMessageMarkerPosition(self, msg: str) -> int:
+    def getPacketMarkerPosition(self, msg: str) -> int:
         """ 
         In the protocol being used by the Elves, 
         the start of a packet is indicated by a sequence of four characters that are all different. 
