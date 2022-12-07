@@ -1,7 +1,7 @@
 from unittest import TestCase
 from day06.Decoder import Decoder
 
-class TryTesting(TestCase):
+class TestDecoder (TestCase):
     def test_detect_packet_marker_with_msg_1(self):
         decoder = Decoder()
         msg = 'bvwbjplbgvbhsrlpgdmjqwftvncz'
