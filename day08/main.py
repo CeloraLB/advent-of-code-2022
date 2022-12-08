@@ -12,5 +12,13 @@ def main():
     visible_trees = tree_view.countVisibleTrees(tree_map)
     print('there are {} visible trees'.format(visible_trees))
 
+    scenic_score_map = tree_view.getScenicScoreMap(tree_map)
+    max_scenic_score = 0 
+    for row in scenic_score_map:
+        for scenic_score in row:
+            if scenic_score > max_scenic_score:
+                max_scenic_score = scenic_score
+    print('highest scenic score available is {}'.format(max_scenic_score))
+
 if __name__ == '__main__':
     main()

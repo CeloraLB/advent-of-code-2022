@@ -4,7 +4,6 @@ class TreeView:
         Calculate how many trees are visible from outside the tree_map grid
         All of the trees around the edge of the grid are visible
         """
-        # assuming tree_line is a square matrix
         visible_trees_map = [['-' for col in range(len(tree_map))] for row in range(len(tree_map))]
         visible_trees = 0 
         for rot in range(4):
@@ -24,3 +23,27 @@ class TreeView:
                             visible_trees += 1
 
         return visible_trees
+
+    def getScenicScoreMap(self, tree_map: list) -> list:
+        """
+        A tree's scenic score is found by multiplying together its viewing distance in each of the four directions.
+        If a tree is right on the edge, at least one of its viewing distances will be zero.
+        """
+        scenic_score_map = [[1 for col in range(len(tree_map))] for row in range(len(tree_map))]
+        for rot in range(4):
+            # 90 deg rotation counterclockwise
+            tree_map = [list(x) for x in zip(*tree_map)][::-1]
+            scenic_score_map = [list(x) for x in zip(*scenic_score_map)][::-1]
+            for i in range(len(tree_map)):
+                tree_line= tree_map[i]
+                for j in range(len(tree_line)):
+                    scenic_score = 0
+                    if (not i in [0, len(tree_map)-1]) and (not j in [0, len(tree_map)-1]): # skip if it is on the matrix border 
+                        remainder_tree_line = tree_line[j+1::]
+                        for k in range(len(remainder_tree_line)):
+                            scenic_score += 1
+                            if tree_line[j] <= remainder_tree_line[k]:
+                                break
+                    scenic_score_map[i][j] *= scenic_score
+                        
+        return scenic_score_map
