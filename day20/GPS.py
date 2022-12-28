@@ -12,29 +12,34 @@ class GPS():
             coordinates.append((i, enc_coordinates[i]))
 
         for i in range(n):
-            index, value = coordinates[i]
-            if value == 0:
+            if coordinates[i] == 0:
                 continue
-
-            new_index = index + value
-            fw_or_bw = -1
-            if value < 0:
-                new_index = (new_index - 1) % n
-            elif new_index >= n:
-                fw_or_bw = 1
-                new_index = (new_index + 1) % n
-
-            for j in range(n):
-                c_index, c_value = coordinates[j]                
-                if min(index, new_index) <= c_index <= max(index, new_index):
-                    c_index += fw_or_bw
-
-                coordinates[j] = (c_index % n, c_value)     
-            coordinates[i] = (new_index % n, value)
-
+            coordinates = self._doStep(coordinates, i)
             decrypted_coordinate = self._composeListFromCoordinates(coordinates)
 
         return decrypted_coordinate
+
+    def _doStep(self, coordinates: list, i: int) -> list:
+        n = len(coordinates)
+        index, value = coordinates[i]
+        new_index = index + value
+        fw_or_bw = -1
+        if value < 0:
+            # new_index = (new_index-1) % n
+            new_index = new_index % (n-1)
+        elif new_index >= n:
+            fw_or_bw = 1
+            # new_index = (new_index+1) % n
+            new_index = new_index % (n-1)
+
+        for j in range(n):
+            c_index, c_value = coordinates[j]                
+            if i != j and min(index, new_index) <= c_index <= max(index, new_index):
+                c_index += fw_or_bw
+
+            coordinates[j] = (c_index % n, c_value)     
+        coordinates[i] = (new_index % n, value)
+        return coordinates
 
     def _composeListFromCoordinates(self, coordinates: list) -> list:
         l = [0 for x in range(len(coordinates))]
